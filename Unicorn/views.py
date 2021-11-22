@@ -15,7 +15,7 @@ def index(request):
 
 #endregion
 
-#region login
+#region ingresar
 
 def ingresarlogin(request):
     if request.method=="POST":
@@ -33,10 +33,7 @@ def ingresarlogin(request):
             return render(request, "Login/login.html", {'mensaje': mensaje})
     else:
         return render(request,"Login/login.html")
-
-
-
-#endredion
+#endregion
 
 #region empresa
 
@@ -80,7 +77,8 @@ def editarempresa(request, id):
 
 def registrardepartamento(request, id):
     empresa = Empresa.objects.get(id = id)
-    reclutador = Reclutador.objects.get(Email = request.user.email)
+    reclutador = Reclutador.objects.get(Email = request.user.email) 
+    # empresa = Empresa.objects.all()
     if request.method=="POST":
         if request.POST.get('nombre'):
             departamento = Departamento()
@@ -89,7 +87,6 @@ def registrardepartamento(request, id):
             strId = str(id)
             insertar = connection.cursor()
             insertar.execute("call registrardepartamento('"+departamento.Nombre+"','"+departamento.Codigo+"','"+ strId +"')")
-            
             departamentos = Departamento.objects.filter(empresa_id = id)
             return render(request,"Departamento/listadodepartamento.html", {'deptos': departamentos, 'empresa': empresa})
     else:
@@ -132,17 +129,31 @@ def editardepartamento(request, id):
 
 #region proceso
 
-def registrarproceso(request):
-    return render(request,"Proceso/proceso.html")
+def registrarproceso(request,id):
+    iddepartamento = str(id)
+    if request.method=="POST":
+        if request.POST.get('fechainicio') and request.POST.get('fechafin') and request.POST.get('cargo'):
+            proceso = Proceso()
+            proceso.FechaInicio = request.POST.get('fechainicio')
+            proceso.FechaFin = request.POST.get('fechafin')
+            proceso.Cargo = request.POST.get('cargo')
+            estado = "inicio"
+            codigo = "1"
+            insertar = connection.cursor()
+            insertar.execute("call registrarproceso('"+proceso.FechaInicio+"','"+proceso.FechaFin+"','"+estado+"','"+codigo+"','"+proceso.Cargo+"','"+iddepartamento+"')")
+            return redirect("/listadoempresa")
+    else:
+        return render(request,"Proceso/proceso.html")
 
-def listarprocesos(request, id):
-    empresa = Empresa.objects.get(id = id)
-    departamentos = Departamento.objects.filter(empresa_id = id)
-    
-    return render(request, 'Proceso/listadoprocesos.html', {'deptos': departamentos, 'empresa': empresa})
-
+def listadoproceso(request):
+    c = 0
+    departamentosALL = []
+    reclutador = Reclutador.objects.get(Email = request.user.email) 
+    empresas = Empresa.objects.filter(reclutador_id=reclutador.id)
+    for e in empresas:
+        departamentosALL.append(Departamento.objects.filter(empresa_id = e.id))
+    return render(request,"Proceso/listadoprocesos.html",{"empresas":empresas,"departamentos": departamentosALL})
 #endregion
-
 
 #region Reclutador
 
