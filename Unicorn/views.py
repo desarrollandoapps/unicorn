@@ -145,14 +145,17 @@ def registrarproceso(request,id):
     else:
         return render(request,"Proceso/proceso.html")
 
-def listadoproceso(request):
-    c = 0
-    departamentosALL = []
+def listadoprocesos(request):
+    departamentos = []
+    procesos = []
     reclutador = Reclutador.objects.get(Email = request.user.email) 
     empresas = Empresa.objects.filter(reclutador_id=reclutador.id)
     for e in empresas:
-        departamentosALL.append(Departamento.objects.filter(empresa_id = e.id))
-    return render(request,"Proceso/listadoprocesos.html",{"empresas":empresas,"departamentos": departamentosALL})
+        departamentos.append(Departamento.objects.filter(empresa_id = e.id))
+    for d in departamentos:
+        procesos.append(Proceso.objects.filter(departamento_id = d[0].id))
+
+    return render(request,"Proceso/listadoprocesos.html",{"empresas":empresas,"departamentos": departamentos, "procesos": procesos})
 #endregion
 
 #region Reclutador

@@ -7,8 +7,18 @@ body {
 .azul {
     color: #0028FF; 
 }
+
+.bg-azul {
+    background-color: #0028FF !important;
+}
 .azul-oscuro {
     color: #062D92; 
+}
+.nav-pills .nav-item .nav-link {
+    color: rgb(244, 220, 220);
+}
+.nav-pills .nav-item .nav-link:hover {
+    color: #FFF;
 }
 .btn-principal {
    color: #0028FF; 

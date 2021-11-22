@@ -1,8 +1,39 @@
 {% load static %}
 {% include "header.html" %}
-
-
-
+<div class="container">
+    <h4>Listado de Mis Empresas</h4>
+    <div class="d-flex justify-content-end">
+        <a href="/registrarempresa" class="btn btn-primary">Crear empresa</a>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Empresa</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in empresas %}
+                {% if reclutador.id == e.reclutador_id %}
+                    <tr>
+                        <td>{{ e.Nombre }}</td>
+                        <td>
+                            <a href="/listadodepartamento/{{ e.id }}" class="text-decoration-none me-3">
+                                <i class="fas fa-eye" title="Departamentos"></i>
+                            </a>
+                            <a href="/editarempresa/{{ e.id }}" class="text-decoration-none me-3">
+                                <i class="fas fa-edit" title="Editar"></i>
+                            </a>
+                            <a href="#" onclick="borrar('{{ e.id }}')" class="text-decoration-none">
+                                <i class="fas fa-trash-alt" title="Eliminar"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
         <div class="container">
             <section class="p-top-100 p-bottom-70 bgcolor">
                 <div class="container">
@@ -11,39 +42,13 @@
                             <div class="modules__content">
                                 <div class="withdraw_module withdraw_history bg-white">
                                     <div class="withdraw_table_header">
-                                        <h4>Listado de Mis Empresas</h4>
-                                        <div class="d-flex justify-content-end">
-                                            <a href="/registrarempresa" class="btn btn-primary">Crear empresa</a>
-                                        </div>
+                                        
+                                        
                                     </div>
                                     <div class="table-responsive">
                                         <table class="table withdraw__table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Empresa</th>
-                                                    <th>Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for e in empresas %}
-                                                    {% if reclutador.id == e.reclutador_id %}
-                                                        <tr>
-                                                            <td>{{ e.Nombre }}</td>
-                                                            <td>
-                                                                <a href="/listadodepartamento/{{ e.id }}">
-                                                                    <i class="fas fa-eye mr-3" title="Departamentos"></i>
-                                                                </a>
-                                                                <a href="/editarempresa/{{ e.id }}">
-                                                                    <i class="fas fa-edit mr-3" title="Editar"></i>
-                                                                </a>
-                                                                <a href="#" onclick="borrar('{{ e.id }}')">
-                                                                    <i class="fas fa-trash-alt" title="Eliminar"></i>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </tbody>
+                                            
+                                            
                                         </table>
                                     </div>
                                 </div>
