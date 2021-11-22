@@ -1,0 +1,55 @@
+{% load static %}
+
+{% include "header.html" %}
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="information_module">
+            <div class="toggle_title">
+                <h4>Registre su Proceso</h4>
+            </div>
+            <div class="information__set">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="information_wrapper form--fields row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Fecha Inicio</label>
+                                <input type="date" name="fechainicio" id="fechainicio" class="text_field">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Fecha Final</label>
+                                <input type="date" name="fechafin" id="fechafin" class="text_field">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">Cargo del Proceso</label>
+                            <input type="text" name="cargo" id="cargo" class="text_field">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Seleccione una Empresa</label>
+                                <select name="" id="" class="form-control" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Seleccione un Departamento</label>
+                                <select name="" id="" class="form-control" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <button style="margin-left: 40%;" type="submit" class="btn btn-primary">Guardar
+                            Departamento</button>
+                </form>
+            </div><!-- ends: .information_wrapper -->
+        </div><!-- ends: .information__set -->
+    </div><!-- ends: .information_module -->
+</div><!-- ends: .col-md-12 -->
+
+{% include "footer.html" %}

@@ -1,0 +1,125 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+.azul {
+    color: #0028FF; 
+}
+.azul-oscuro {
+    color: #062D92; 
+}
+.btn-principal {
+   color: #0028FF; 
+   border-color:#BBCCFB;
+   background: transparent linear-gradient(113deg, #F2F7FF 0%, #BECBFF 100%) 0% 0% no-repeat padding-box;
+   border: 2px solid #BBCCFB;
+   border-radius: 31px;
+   opacity: 1;
+   background: rgb(242,247,255);
+   background: -webkit-linear-gradient(113deg, rgba(242,247,255,1) 0%, rgba(190,203,255,1) 100%, rgba(0,212,255,1) 100%);
+   background: linear-gradient(113deg, rgba(242,247,255,1) 0%, rgba(190,203,255,1) 100%, rgba(0,212,255,1) 100%);
+   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f2f7ff",endColorstr="#00d4ff",GradientType=1); 
+   padding: 1rem 2rem;
+}
+
+.btn-principal:hover {
+    color:#0028FF;
+    border-color:#0028FF
+}
+
+.btn-secundario {
+    background: #0028FF 0% 0% no-repeat padding-box;
+    border: 2px solid #F3F6FF;
+    border-radius: 31px;
+    opacity: 1;
+    color: #FFF;
+}
+
+.btn-secundario:hover {
+    color: #FFF;
+    background: #011bb0 0% 0% no-repeat padding-box;
+}
+
+.item-u {
+    margin-left: 1rem;
+    padding: 1rem 2rem;
+    color: #0028FF !important; 
+}
+
+.carousel-caption {
+    color: #241F21;
+    text-align: start;
+    width: 20rem;
+}
+
+.bg-rounded {
+    background-color: #F1F3F2;
+    border-bottom-right-radius: 10% 50%;
+    border-top-right-radius: 10% 50%;
+    border-bottom-left-radius: 24px;
+    border-top-left-radius: 24px;
+}
+
+.card {
+    border-radius: 24px;
+    /* opacity: 0.6; */
+}
+
+.card:hover {
+    background-color: #f8f9fa;
+}
+
+.title-blue {
+    color: #1E93FF;
+}
+
+p {
+    font-size: 16px;
+}
+
+/* //// */
+
+.header {
+    background-image: url(../images/fondo-azul.svg);
+    width: 100%;
+    height: 20%;
+}
+
+.form-codigo {
+    width: 35% !important;
+}
+
+.form-control {
+    border-radius: 31px;
+    text-align: center;
+    font-size: small;
+}
+
+@media (max-width: 576px) { 
+    .btn-principal {
+        padding: .375rem .75rem !important;
+    }
+    .form-codigo {
+        width: 100% !important;
+    }
+
+}
+
+.fondo-azul {
+    background: transparent linear-gradient(180deg, var(--unnamed-color-0028ff) 0%, #0962EA 100%) 0% 0% no-repeat padding-box;
+    background: transparent linear-gradient(180deg, #0028FF 0%, #0962EA 100%) 0% 0% no-repeat padding-box;
+    z-index: -10;
+    width: 100%;
+    height: 100vh;
+}
+
+.fondo-reclutador {
+    background: #E4E9FF 0% 0% no-repeat padding-box;
+    /* opacity: 0.7; */
+}
+
+.alto-full {
+    height: 100vh;
+}

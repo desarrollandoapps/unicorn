@@ -1,0 +1,29 @@
+{% include "header.html" %}
+
+            <div class="container">
+                        <div class="col-md-12">
+                            <div class="information_module">
+                                <div class="toggle_title">
+                                    <h4>Registre su Departamento de {{ empresa.Nombre }}</h4>
+                                </div>
+                                <div class="information__set">
+                                    <form action="" method="POST">
+                                        {% csrf_token %}
+                                    <div class="information_wrapper form--fields row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <input type="text" name="nombre" id="nombre" class="text_field"  placeholder="Nombre del Departamento">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                                <button type="submit" class="btn btn-primary">Guardar Departamento</button>
+                                        </div>
+                                
+                                     </form>
+                                    </div><!-- ends: .information_wrapper -->
+                                </div><!-- ends: .information__set -->
+                            </div><!-- ends: .information_module -->
+                        </div><!-- ends: .col-md-12 -->       
+        </div><!-- ends: .dashboard_menu_area -->
+
+{% include "footer.html" %}

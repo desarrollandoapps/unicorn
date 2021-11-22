@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/jpg" href='{% static "assets/images/favicon.ico" %}'/>
+    <link rel="stylesheet" href='{% static "assets/css/bootstrap.min.css" %}'>
+    <link rel="stylesheet" href='{% static "assets/css/unicorn.css" %}'>
+    <title>Unicorn</title>
+</head>
+<body class="fondo-reclutador">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-light bg-white shadow-sm py-4">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src='{% static "assets/images/logo.svg" %}' alt="Logo" width="140">
+            </a>
+            <div class="d-flex">
+                <span class="fw-bold azul">
+                    Hola {{ user.first_name }}
+                </span>
+            </div>
+        </div>
+    </nav>
+    <!-- FIN NAVBAR -->
+    <main class="mt-5">
+        <div class="container">
+            <h2 class="text-center azul">
+                Aquí puedes gestionar tus empresas y procesos
+            </h2>
+            <div class="row row-cols-1 row-cols-md-3 g-4 pt-5">
+                <div class="col">
+                    <a href="/listadoempresa" class="text-decoration-none">
+                        <div class="card py-4 px-4 shadow">
+                            <div class="text-center">
+                                <img src='{% static "assets/images/empresa.svg" %}' class="w-50">
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title text-center fw-bold azul-oscuro">GESTIONAR EMPRESA</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="" class="text-decoration-none">
+                        <div class="card py-4 px-4 shadow">
+                            <div class="text-center">
+                                <img src='{% static "assets/images/nuevo-proceso.svg" %}' class="w-50">
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title text-center fw-bold azul-oscuro">NUEVO PROCESO</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="" class="text-decoration-none">
+                        <div class="card py-4 px-4 shadow">
+                            <div class="text-center">
+                                <img src='{% static "assets/images/seguir-proceso.svg" %}' class="w-50">
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title text-center fw-bold azul-oscuro">SEGUIR PROCESO</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

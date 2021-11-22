@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/jpg" href='{% static "assets/images/favicon.ico" %}' />
+    <link rel="stylesheet" href='{% static "assets/css/bootstrap.min.css" %}'>
+    <link rel="stylesheet" href='{% static "assets/css/unicorn.css" %}'>
+    <title>Unicorn</title>
+</head>
+    <body class="fondo-azul">
+        <div class="container alto-full">
+            <div class="row alto-full">
+                <div class="col-md-6 d-flex justify-content-center align-items-center">
+                    <img src='{% static "assets/images/login.svg" %}' class="w-50">
+                </div>
+                <div class="col-md-6 d-flex align-items-center">
+                    <form action="" method="POST" class="w-100">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2">
+                            <h1 class="text-white text-center">Ingrese al sistema</h1>
+                            {% if mensaje %}
+                            <div class="alert alert-warning">{{ mensaje }}</div>
+                            {% endif %}
+                            <input type="text" name="email" id="username" class="form-control mb-4" placeholder="Email" required>
+                            <input type="password" name="contrasena" id="contrasena" class="form-control mb-5" placeholder="Contraseña" required>
+
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-principal">INGRESE</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- FIN NAVBAR -->
+
+        <script src='{% static "assets/js/bootstrap.bundle.min.js" %}'></script>
+    </body>
+
+</html>

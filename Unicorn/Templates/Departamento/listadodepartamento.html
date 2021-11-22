@@ -1,0 +1,72 @@
+{% load static %}
+
+{% include "header.html" %}
+
+        <div class="container">
+            <section class="p-top-100 p-bottom-70 bgcolor">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="modules__content">
+                                <div class="withdraw_module withdraw_history bg-white">
+                                    <div class="withdraw_table_header">
+                                        <h4>Departamentos empresa: {{ empresa.Nombre }}</h4>
+                                        <div class="d-flex justify-content-end">
+                                            <a href="/registrardepartamento/{{ empresa.id }}" class="btn btn-primary">Crear departamento</a>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table withdraw__table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre departamento</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for d in deptos %}
+                                                    <tr>
+                                                        <td>{{ d.Nombre }}</td>
+                                                        <td>
+                                                            <a href="/editardepartamento/{{ d.id }}">
+                                                                <i class="fas fa-edit mr-3" title="Editar"></i>
+                                                            </a>
+                                                            <a href="#" onclick="borrar('{{ d.id }}')">
+                                                                <i class="fas fa-trash-alt" title="Eliminar"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- end .col-md-12 -->
+                    </div><!-- ends: .row -->
+                </div><!-- ends: .container -->
+            </section>
+        </div><!-- ends: .col-md-12 -->
+        <script>
+            function borrar(id) {
+                Swal.fire({
+                    title: '¿Está seguro de eliminar el departamento?',
+                    text: "¡No podrá reversar esta acción!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, eliminar'
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      Swal.fire(
+                        '¡Eliminado!',
+                        'El departamento ha sido eliminada.',
+                        'success'
+                      )
+                      location.href = "/borrardepartamento/" + id;
+                    }
+                  });
+            }
+        </script>  
+{% include "footer.html" %}

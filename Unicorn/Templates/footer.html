@@ -1,0 +1,36 @@
+{% load static %}
+<script src='{% static "js/jquery-1.12.4.min.js" %}'></script>
+<script src='{% static "js/uikit.min.js" %}'></script>
+<script src='{% static "js/popper.js" %}'></script>
+<script src='{% static "js/bootstrap.min.js" %}'></script>
+<script src='{% static "js/chart.bundle.min.js" %}'></script>
+<script src='{% static "js/grid.min.js" %}'></script>
+<script src='{% static "js/jquery-ui.min.js" %}'></script>
+<script src='{% static "js/jquery.barrating.min.js" %}'></script>
+<script src='{% static "js/jquery.countdown.min.js" %}'></script>
+<script src='{% static "js/jquery.counterup.min.js" %}'></script>
+<script src='{% static "js/jquery.easing1.3.js" %}'></script>
+<script src='{% static "js/jquery.magnific-popup.min.js" %}'></script>
+<script src='{% static "js/owl.carousel.min.js" %}'></script>
+<script src='{% static "js/select2.full.min.js" %}'></script>
+<script src='{% static "js/slick.min.js" %}'></script>
+<script src='{% static "js/tether.min.js" %}'></script>
+<script src='{% static "js/trumbowyg.min.js" %}'></script>
+<script src='{% static "js/venobox.min.js" %}'></script>
+<script src='{% static "js/waypoints.min.js" %}'></script>
+<script src='{% static "js/sweetalert.js" %}'></script>
+<script src='{% static "js/main.js" %}'></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var height = $(window).height();
+        var a = parseInt($(".breadcrumb-area").css('padding-top').replace("px", "")) + parseInt($(".breadcrumb-area").css('padding-bottom').replace("px", "")) + $('.breadcrumb-area').height();
+        var b = $('.dashboard_menu_area').height();
+        var c = parseInt($(".toggle_title").css('padding-top').replace("px", "")) + parseInt($(".toggle_title").css('padding-bottom').replace("px", "")) + $('.toggle_title').height();
+        var d = $('#nombre').height();
+        var header = a + b + c + d;
+        $('#full-v').height(height - header);
+    });
+</script>
+</body>
+
+</html>
