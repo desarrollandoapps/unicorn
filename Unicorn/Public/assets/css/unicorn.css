@@ -11,6 +11,9 @@ body {
 .bg-azul {
     background-color: #0028FF !important;
 }
+.bg-procesos {
+    background: #0028FF3D 0% 0% no-repeat padding-box;
+}
 .azul-oscuro {
     color: #062D92; 
 }

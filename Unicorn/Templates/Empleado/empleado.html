@@ -1,0 +1,23 @@
+{% load static %}
+{% include "header.html" %}
+
+<div class="container mt-3">
+    <h4>Registre un empleado</h4>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row g-3 mb-3">
+            <div class="col">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" >
+            </div>
+        </div>
+        <div class="row g-3 mb-3">
+            <div class="col">
+                <button type="submit" class="btn btn-primary btn-lg mb-3">Crear proceso</button>
+            </div>
+        </div>
+            
+    </form>
+</div>
+
+{% include "footer.html" %}

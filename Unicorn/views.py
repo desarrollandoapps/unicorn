@@ -4,9 +4,11 @@ from django.shortcuts import render,redirect, resolve_url
 from django.http import HttpResponse
 from django.template import Template
 from django.template.context import Context
-from Unicorn.models import Reclutador,Empresa,Departamento,Proceso
+from Unicorn.models import Reclutador,Empresa,Departamento,Proceso, Empleado
 from django.contrib.auth.models import User
 from django.contrib import auth
+import random 
+import string
 
 #region index
 
@@ -33,6 +35,10 @@ def ingresarlogin(request):
             return render(request, "Login/login.html", {'mensaje': mensaje})
     else:
         return render(request,"Login/login.html")
+    
+def logout(request):
+    auth.logout()
+    return redirect('/index.html')
 #endregion
 
 #region empresa
@@ -137,8 +143,8 @@ def registrarproceso(request,id):
             proceso.FechaInicio = request.POST.get('fechainicio')
             proceso.FechaFin = request.POST.get('fechafin')
             proceso.Cargo = request.POST.get('cargo')
-            estado = "inicio"
-            codigo = "1"
+            estado = "En preparación"
+            codigo = random_id()
             insertar = connection.cursor()
             insertar.execute("call registrarproceso('"+proceso.FechaInicio+"','"+proceso.FechaFin+"','"+estado+"','"+codigo+"','"+proceso.Cargo+"','"+iddepartamento+"')")
             return redirect("/listadoempresa")
@@ -154,8 +160,16 @@ def listadoprocesos(request):
         departamentos.append(Departamento.objects.filter(empresa_id = e.id))
     for d in departamentos:
         procesos.append(Proceso.objects.filter(departamento_id = d[0].id))
+    procesos = sorted(procesos, key=lambda x: x[0].id)
 
     return render(request,"Proceso/listadoprocesos.html",{"empresas":empresas,"departamentos": departamentos, "procesos": procesos})
+
+def random_id(lenght=6):
+    return ''.join(random.choice(string.ascii_letters + string.digits) for x in range(lenght))
+
+def detalleproceso(request, id):
+    proceso = Proceso.objects.get(id = id)
+    return render(request, "Proceso/detalleproceso.html", {"proceso": proceso})
 #endregion
 
 #region Reclutador
@@ -179,5 +193,51 @@ def registrarreclutador(request):
             return redirect("indexreclutador")
     else:
         return render(request,'registrese.html')
+
+#endregion
+
+#region Empleado
+def registrarempleado(request):
+    if request.method=="POST":
+        if request.POST.get('nombre'):
+            empleado = Empleado()
+            empleado.Nombre = request.POST.get('nombre')
+            empleado.Codigo = random_id()
+            empleado.Estado = "Activo"
+            empleado.save()
+            return redirect('/listadoempleados')
+    else:
+        return render(request,'Empleado/empleado.html')
+
+def listadoempleados(request, id):
+    empleados = Empleado.objects.all().order_by('Nombre')
+    return render(request, "Empleado/listadoempleados.html", {"empleados": empleados})
+
+def borrarempleado(request, id):
+    borrar = connection.cursor()
+    strId = str(id)
+    borrar.execute("call borrarempleado('" + strId + "')")
+    return redirect('/listadoempleados/1')
+
+def editarempleado(request, id):
+    if request.method=="POST":
+        if request.POST.get('nombre'):
+            actualizar = connection.cursor()
+            strId = str(id)
+            actualizar.execute("call editarempleado('" + strId + "', '"+ request.POST.get('nombre') + "', '"+ request.POST.get('estado') +"')")
+            return redirect('/listadoempleados/1')
+    else:
+        empleado = Empleado.objects.filter(id = id)
+        return render(request,"Empleado/editar.html", {'empleado': empleado[0]})
+
+def ingresoempleado(request):
+    if request.method=="POST":
+        if request.POST.get('codigo'):
+            departamento = Departamento.objects.get(codigo = request.POST.get('codigo'))
+            return redirect('/ingresoempleado2/'+ departamento)
+    return render(request,"Empleado/ingreso.html")
+
+def ingresoempleado2(request, id):
+    return True
 
 #endregion
