@@ -34,7 +34,7 @@ urlpatterns = [
     path('editardepartamento/<int:id>', editardepartamento),
     path('borrardepartamento/<int:id>', borrardepartamento),
     path('listadoempleados/<int:id>',listadoempleados),
-    path('registrarempleado',registrarempleado),
+    path('registrarempleado/<int:id>',registrarempleado),
     path('editarempleado/<int:id>',editarempleado),
     path('borrarempleado/<int:id>',borrarempleado),
     path('registroproceso/<int:id>',registrarproceso),

@@ -1,10 +1,9 @@
 {% load static %}
 {% include "header.html" %}
 <div class="container mt-3">
-    <!-- <h4>Empleados: <span class="fw-light">{{ depto.empresa.Nombre }} - {{ depto.Nombre }}</span></h4> -->
-    <h4>Empleados</h4>
+    <h4>Empleados de <span class="fw-light">{{ depto.empresa.Nombre }} ({{ depto.Nombre }})</span></h4>
     <div class="d-flex justify-content-end">
-        <a href="/registrarempleado" class="btn btn-primary">Nuevo empleado</a>
+        <a href="/registrarempleado/{{ depto.id }}" class="btn btn-primary">Nuevo empleado</a>
     </div>
     {% if empleados %}
     <table class="table table-hover">

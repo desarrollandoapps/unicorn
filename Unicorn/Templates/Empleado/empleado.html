@@ -2,7 +2,7 @@
 {% include "header.html" %}
 
 <div class="container mt-3">
-    <h4>Registre un empleado</h4>
+    <h4>Registre un empleado en {{ depto.empresa.Nombre }} ({{ depto.Nombre }})</h4>
     <form action="" method="POST">
         {% csrf_token %}
         <div class="row g-3 mb-3">
@@ -13,7 +13,7 @@
         </div>
         <div class="row g-3 mb-3">
             <div class="col">
-                <button type="submit" class="btn btn-primary btn-lg mb-3">Crear proceso</button>
+                <button type="submit" class="btn btn-primary btn-lg mb-3">Guardar</button>
             </div>
         </div>
             

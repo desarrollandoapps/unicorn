@@ -147,7 +147,7 @@ def registrarproceso(request,id):
             codigo = random_id()
             insertar = connection.cursor()
             insertar.execute("call registrarproceso('"+proceso.FechaInicio+"','"+proceso.FechaFin+"','"+estado+"','"+codigo+"','"+proceso.Cargo+"','"+iddepartamento+"')")
-            return redirect("/listadoempresa")
+            return redirect("/listadoprocesos")
     else:
         return render(request,"Proceso/proceso.html")
 
@@ -158,8 +158,9 @@ def listadoprocesos(request):
     empresas = Empresa.objects.filter(reclutador_id=reclutador.id)
     for e in empresas:
         departamentos.append(Departamento.objects.filter(empresa_id = e.id))
-    for d in departamentos:
-        procesos.append(Proceso.objects.filter(departamento_id = d[0].id))
+    for depto in departamentos:
+        for d in depto:
+            procesos.append(Proceso.objects.filter(departamento_id = d.id))
     procesos = sorted(procesos, key=lambda x: x[0].id)
 
     return render(request,"Proceso/listadoprocesos.html",{"empresas":empresas,"departamentos": departamentos, "procesos": procesos})
@@ -197,21 +198,26 @@ def registrarreclutador(request):
 #endregion
 
 #region Empleado
-def registrarempleado(request):
+def registrarempleado(request, id):
     if request.method=="POST":
         if request.POST.get('nombre'):
+            depto = Departamento.objects.get(id = id)
             empleado = Empleado()
             empleado.Nombre = request.POST.get('nombre')
             empleado.Codigo = random_id()
             empleado.Estado = "Activo"
+            empleado.departamento = depto
             empleado.save()
-            return redirect('/listadoempleados')
+            strId = str(id)
+            return redirect('/listadoempleados/' + strId)
     else:
-        return render(request,'Empleado/empleado.html')
+        depto = Departamento.objects.get(id = id)
+        return render(request,'Empleado/empleado.html', {"depto": depto})
 
 def listadoempleados(request, id):
-    empleados = Empleado.objects.all().order_by('Nombre')
-    return render(request, "Empleado/listadoempleados.html", {"empleados": empleados})
+    depto = Departamento.objects.get(id = id)
+    empleados = Empleado.objects.filter(departamento_id = id).order_by('Nombre')
+    return render(request, "Empleado/listadoempleados.html", {"empleados": empleados, "depto": depto})
 
 def borrarempleado(request, id):
     borrar = connection.cursor()
@@ -233,11 +239,18 @@ def editarempleado(request, id):
 def ingresoempleado(request):
     if request.method=="POST":
         if request.POST.get('codigo'):
-            departamento = Departamento.objects.get(codigo = request.POST.get('codigo'))
-            return redirect('/ingresoempleado2/'+ departamento)
-    return render(request,"Empleado/ingreso.html")
+            departamento = Departamento.objects.get(Codigo = request.POST.get('codigo'))
+            depto = str(departamento.id)
+            return redirect('/ingresoempleado2/'+ depto)
+    else:
+        return render(request,"Empleado/ingreso.html")
 
 def ingresoempleado2(request, id):
-    return True
+    if request.method=="POST":
+        if request.POST.get('codigo'):
+            empleado = Empleado.objects.get(Codigo = request.POST.get('codigo'))
+            return render(request,"Respuesta/index.html", {"empleado": empleado})
+    else:
+        return render(request,"Empleado/ingreso2.html")
 
 #endregion

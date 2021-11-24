@@ -8,13 +8,6 @@ class Reclutador(models.Model):
     class Meta:
         db_table = "reclutador"
 
-class Empleado(models.Model):
-    Nombre=models.CharField(max_length=255)
-    Codigo=models.CharField(max_length=255)
-    Estado=models.CharField(max_length=255)
-    class Meta:
-        db_table = "empleado"
-
 class Empresa(models.Model):
     Nombre=models.CharField(max_length=255)
     reclutador=models.ForeignKey(Reclutador,on_delete=models.PROTECT)
@@ -27,6 +20,14 @@ class Departamento(models.Model):
     empresa=models.ForeignKey(Empresa,on_delete=models.PROTECT)
     class Meta:
         db_table = "departamento"
+
+class Empleado(models.Model):
+    Nombre=models.CharField(max_length=255)
+    Codigo=models.CharField(max_length=255)
+    Estado=models.CharField(max_length=255)
+    departamento=models.ForeignKey(Departamento,on_delete=models.PROTECT)
+    class Meta:
+        db_table = "empleado"
 
 class Respuesta_ADN(models.Model):
     Pregunta=models.CharField(max_length=255)
