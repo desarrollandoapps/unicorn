@@ -28,6 +28,9 @@
     </div>
     <main class="container d-flex justify-content-center">
         <div class="py-5 form-codigo">
+            {% if info %}
+            <div class="alert alert-danger my-3 text-center">{{ info }}</div>
+            {% endif %}
             <form action="" method="POST">
                 {% csrf_token %}
                 <input type="text" name="codigo" id="codigo" class="form-control mb-5" placeholder="Ingresa el código de tu empresa">

@@ -4,9 +4,10 @@ from django.shortcuts import render,redirect, resolve_url
 from django.http import HttpResponse
 from django.template import Template
 from django.template.context import Context
-from Unicorn.models import Reclutador,Empresa,Departamento,Proceso, Empleado
+from Unicorn.models import Reclutador,Empresa,Departamento,Proceso, Empleado, Respuesta, Respuesta_ADN
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django.db.models import Count
 import random 
 import string
 
@@ -89,7 +90,7 @@ def registrardepartamento(request, id):
         if request.POST.get('nombre'):
             departamento = Departamento()
             departamento.Nombre = request.POST.get('nombre')
-            departamento.Codigo = "1"
+            departamento.Codigo = random_id()
             strId = str(id)
             insertar = connection.cursor()
             insertar.execute("call registrardepartamento('"+departamento.Nombre+"','"+departamento.Codigo+"','"+ strId +"')")
@@ -170,7 +171,15 @@ def random_id(lenght=6):
 
 def detalleproceso(request, id):
     proceso = Proceso.objects.get(id = id)
-    return render(request, "Proceso/detalleproceso.html", {"proceso": proceso})
+    respuestas = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id)
+    numResp = Respuesta_ADN.objects.all().distinct().values('empleado_id')
+    numResp = len(numResp)
+    return render(request, "Proceso/detalleproceso.html", {"proceso": proceso, "respuestas": respuestas, "numResp": numResp})
+
+def entrenarred(request, id):
+    respuestas = Respuesta_ADN.objects.filter(departamento_id = id)
+    #TODO: Cambiar estado proceso
+    return render(request, "Proceso/entrenared.html")
 #endregion
 
 #region Reclutador
@@ -239,18 +248,43 @@ def editarempleado(request, id):
 def ingresoempleado(request):
     if request.method=="POST":
         if request.POST.get('codigo'):
-            departamento = Departamento.objects.get(Codigo = request.POST.get('codigo'))
-            depto = str(departamento.id)
-            return redirect('/ingresoempleado2/'+ depto)
+            try:
+                departamento = Departamento.objects.get(Codigo = request.POST.get('codigo'))
+                depto = str(departamento.id)
+                return redirect('/ingresoempleado2/'+ depto)
+            except:
+                return render(request,"Empleado/ingreso.html", {"info": "El código no coincide. Intente de nuevo."})        
     else:
         return render(request,"Empleado/ingreso.html")
 
 def ingresoempleado2(request, id):
     if request.method=="POST":
         if request.POST.get('codigo'):
-            empleado = Empleado.objects.get(Codigo = request.POST.get('codigo'))
-            return render(request,"Respuesta/index.html", {"empleado": empleado})
+            try:
+                empleado = Empleado.objects.get(Codigo = request.POST.get('codigo'))
+                return render(request,"Respuesta/index.html", {"empleado": empleado, "depto": id})
+            except:
+                return render(request,"Empleado/ingreso2.html", {"info": "El código no coincide. Intente de nuevo."})
     else:
         return render(request,"Empleado/ingreso2.html")
 
+def registrarrespuestaempleado(request):
+    if request.method=="POST":
+        if request.POST.get('pregunta[]') and request.POST.get('categoria[]') and request.POST.get('factor[]') and request.POST.get('respuesta[]'):
+            respuesta = Respuesta_ADN()
+            preguntas = request.POST.getlist('pregunta[]')
+            categorias = request.POST.getlist('categoria[]')
+            factores = request.POST.getlist('factor[]')
+            respuestas = request.POST.getlist('respuesta[]')
+            depto = str(request.POST.get('depto'))
+            empleado = str(request.POST.get('empleado'))
+            for i in range(0, 60):
+                guardar = connection.cursor()
+                guardar.execute("call registrarrespuestasempleado('" + preguntas[i] + "', '" + categorias[i] + "', '"+ factores[i] + "', '" + respuestas[i] + "', '" + depto + "', '" + empleado + "')")
+            return redirect("/finalempleado")
+    else:
+        return redirect('home')
+
+def finalempleado(request):
+    return render(request, "final-cuestionario-empleado.html")
 #endregion

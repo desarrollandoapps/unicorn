@@ -35,9 +35,9 @@ class Respuesta_ADN(models.Model):
     Factor=models.CharField(max_length=255)
     Respuesta=models.CharField(max_length=255)
     departamento=models.ForeignKey(Departamento,on_delete=models.PROTECT)
-    empresa=models.ForeignKey(Empresa,on_delete=models.PROTECT)
+    empleado=models.ForeignKey(Empleado,on_delete=models.PROTECT)
     class Meta:
-        db_table = "respuesta_adn"
+        db_table = "respuestas_adn"
 
 class Proceso(models.Model):
     FechaInicio=models.CharField(max_length=255)

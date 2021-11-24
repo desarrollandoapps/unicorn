@@ -1,39 +1,35 @@
 {% load static %}
-{% include "header.html" %}
+{% include "header2.html" %}
 
-<div class="container">
-    <div class="col-md-12">
+<div class="container mt-3">
+    <h5 class="text-center azul-oscuro">Complete cada una de las secciones para construir el ADN del lugar donde trabaja</h5>
+    
+    <div class="col-md-12 mt-4">
         <div class="information_module">
-            <div class="toggle_title">
-                <h4>Registre su Empresa</h4>
-            </div>
             <div class="information__set">
-                <form action="" method="POST">
+                <form action="/registrarrespuestaempleado" method="POST">
                     {% csrf_token %}
+                    <input type="hidden" name="depto" value="{{ depto }}">
+                    <input type="hidden" name="empleado" value="{{ empleado.id }}">
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
                             <button class="nav-link active" id="nav-datos-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-home"
-                                aria-selected="true">Datos Personales</button>
+                                aria-selected="true">Datos Socio-demográficos</button>
                             <button class="nav-link" id="nav-seccion1-tab" data-bs-toggle="tab" data-bs-target="#nav-2"
-                                type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Seccion
-                                1</button>
+                                type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Sección 1</button>
                             <button class="nav-link" id="nav-seccion2-tab" data-bs-toggle="tab" data-bs-target="#nav-3"
-                                type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Seccion
-                                2</button>
+                                type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Sección 2</button>
                             <button class="nav-link" id="nav-seccion3-tab" data-bs-toggle="tab" data-bs-target="#nav-4"
-                                type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Seccion
-                                3</button>
+                                type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Sección 3</button>
                             <button class="nav-link" id="nav-seccion4-tab" data-bs-toggle="tab" data-bs-target="#nav-5"
-                                type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Seccion
-                                4</button>
+                                type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Sección 4</button>
                         </div>
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-1" role="tabpanel"
                             aria-labelledby="nav-home-tab">
                             <br><br>
-                            <h1 class="text-center py-3">Cuestionario IPIP-NEO</h1>
                             <div class="container">
                             </div>
                             <div class="container">
@@ -181,10 +177,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <center><br><br>
-                                    <button class="btn btn-light rounded-pill" type="button"
-                                        onclick="seccion1();">Continuar</button>
-                                </center>
+                                <div class="text-center mt-3 py-3 fondo-preguntas rounded-bottom">
+                                    <button class="btn btn-light rounded-pill px-5" type="button" onclick="seccion1();">Continuar</button>
+                                </div>
                                 <script>
                                     function seccion1() {
                                         seccionuno = document.getElementById('nav-seccion1-tab');
@@ -195,7 +190,6 @@
                         </div>
                         <div class="tab-pane fade" id="nav-2" role="tabpanel" aria-labelledby="nav-profile-tab">
                             <br><br>
-                            <hr>
                             <div class="pb-5">
                                 <div class="row pb-3">
                                     <input type="text" name="pregunta[]" value="Pregunta 1" hidden>
@@ -580,10 +574,9 @@
                                     </div>
                                     <div class="col-sm-1"></div>
                                 </div>
-                                <center><br><br>
-                                    <button class="btn btn-light rounded-pill" type="button"
-                                        onclick="seccion2();">Continuar</button>
-                                </center>
+                                <div class="text-center mt-3 py-3 fondo-preguntas rounded-bottom">
+                                    <button class="btn btn-light rounded-pill px-5" type="button" onclick="seccion2();">Continuar</button>
+                                </div>
                                 <script>
                                     function seccion2() {
                                         seccionuno = document.getElementById('nav-seccion2-tab');
@@ -983,10 +976,9 @@
                                     </div>
                                     <div class="col-sm-1"></div>
                                 </div>
-                                <center><br><br>
-                                    <button class="btn btn-light rounded-pill" type="button"
-                                        onclick="seccion3();">Continuar</button>
-                                </center>
+                                <div class="text-center mt-3 py-3 fondo-preguntas rounded-bottom">
+                                    <button class="btn btn-light rounded-pill px-5" type="button" onclick="seccion3();">Continuar</button>
+                                </div>
                                 <script>
                                     function seccion3() {
                                         seccionuno = document.getElementById('nav-seccion3-tab');
@@ -1387,10 +1379,9 @@
                                     </div>
                                     <div class="col-sm-1"></div>
                                 </div>
-                                <center><br><br>
-                                    <button class="btn btn-light rounded-pill" type="button"
-                                        onclick="seccion4();">Continuar</button>
-                                </center>
+                                <div class="text-center mt-3 py-3 fondo-preguntas rounded-bottom">
+                                    <button class="btn btn-light rounded-pill px-5" type="button" onclick="seccion4();">Continuar</button>
+                                </div>
                                 <script>
                                     function seccion4() {
                                         seccionuno = document.getElementById('nav-seccion4-tab');
@@ -1790,7 +1781,10 @@
                                     <div class="col-sm-1"></div>
                                 </div>
                             </div>
-                            <center><button class="btn btn-primary" type="submit">Finalizar</button></center>
+                            <div class="text-center mt-3 py-3 fondo-preguntas rounded-bottom">
+                                <button class="btn btn-light rounded-pill px-5" type="submit">Finalizar</button>
+                                
+                            </div>
                         </div>
                     </div>
                 </form>

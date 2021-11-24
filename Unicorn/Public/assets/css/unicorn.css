@@ -133,6 +133,17 @@ p {
     /* opacity: 0.7; */
 }
 
+.fondo-preguntas {
+    background: #BECBFF;
+}
+
 .alto-full {
     height: 100vh;
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+  color: #FFF !important;
+  background-color: #859EFF !important;
+  border-color: #859EFF !important;
 }
