@@ -177,9 +177,51 @@ def detalleproceso(request, id):
     return render(request, "Proceso/detalleproceso.html", {"proceso": proceso, "respuestas": respuestas, "numResp": numResp})
 
 def entrenarred(request, id):
-    respuestas = Respuesta_ADN.objects.filter(departamento_id = id)
+    proceso = Proceso.objects.get(id = id)
+    respuestas = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id)
+    # Obtener los empleados por las repuestas
+    idE = Respuesta_ADN.objects.distinct().values('empleado_id')
+    ids = []
+    empleados = []
+    for id in idE:
+        ids.append(id['empleado_id'])
+    for id in ids:
+        empleados.append(Empleado.objects.get(id = id))
+    # Obtener las respuestas por categoría
+    respAmabilidad = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(Categoria = "Amabilidad")
+    respGregarismo = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(Categoria = "Gregarismo")
+    respAsertividad = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(Categoria = "Asertividad")
+    respActividad = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(Categoria = "Nivel de Actividad")
+    respEmociones = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(Categoria = "Búsqueda de emociones")
+    respAlegria = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(Categoria = "Alegría")
+    amabilidad = 0
+    gregarismo = 0
+    asertividad = 0
+    actividad = 0
+    emociones = 0
+    alegria = 0
+    respuestasEmpleados = []
+    # Promediar las respuestas por categoría por empleado
+    for i in range(0, len(ids)):
+        re = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(empleado_id = id)
+        respuestasEmpleados.append(re)
+
+
+    for i in range(0, len(respAmabilidad)):
+        r = respAmabilidad[i]
+        amabilidad += int(r.Factor) * int(r.Respuesta)
+        r = respGregarismo[i]
+        gregarismo += int(r.Factor) * int(r.Respuesta)
+        r = respAsertividad[i]
+        asertividad += int(r.Factor) * int(r.Respuesta)
+        r = respActividad[i]
+        actividad += int(r.Factor) * int(r.Respuesta)
+        r = respEmociones[i]
+        emociones += int(r.Factor) * int(r.Respuesta)
+        r = respAlegria[i]
+        alegria += int(r.Factor) * int(r.Respuesta)
     #TODO: Cambiar estado proceso
-    return render(request, "Proceso/entrenared.html")
+    return render(request, "Proceso/entrenared.html", {"amabilidad": amabilidad, "gregarismo": gregarismo, "asertividad": asertividad, "actividad": actividad, "emociones": emociones, "alegria": alegria, "empleados": empleados, "respuestasEmpleados": len(respuestasEmpleados)})
 #endregion
 
 #region Reclutador
