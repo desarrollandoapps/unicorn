@@ -178,22 +178,21 @@ def detalleproceso(request, id):
 
 def entrenarred(request, id):
     proceso = Proceso.objects.get(id = id)
+    # respuestas del departamento
     respuestas = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id)
+    # respuestas de diferentes empleados
+    
+
     # Obtener los empleados por las repuestas
-    idE = Respuesta_ADN.objects.distinct().values('empleado_id')
+    idE = Respuesta_ADN.objects.distinct().values('empleado_id').filter(departamento_id = proceso.departamento_id)
+    todasrespuestas = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id)
     ids = []
     empleados = []
-    for id in idE:
-        ids.append(id['empleado_id'])
-    for id in ids:
-        empleados.append(Empleado.objects.get(id = id))
-    # Obtener las respuestas por categoría
-    respAmabilidad = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(Categoria = "Amabilidad")
-    respGregarismo = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(Categoria = "Gregarismo")
-    respAsertividad = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(Categoria = "Asertividad")
-    respActividad = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(Categoria = "Nivel de Actividad")
-    respEmociones = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(Categoria = "Búsqueda de emociones")
-    respAlegria = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(Categoria = "Alegría")
+
+    for id1 in idE:
+        ids.append(id1['empleado_id'])
+    for id2 in ids:
+        empleados.append(Empleado.objects.get(id = id2))
     amabilidad = 0
     gregarismo = 0
     asertividad = 0
@@ -201,27 +200,45 @@ def entrenarred(request, id):
     emociones = 0
     alegria = 0
     respuestasEmpleados = []
+    x = []
+    y = []
     # Promediar las respuestas por categoría por empleado
     for i in range(0, len(ids)):
-        re = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(empleado_id = id)
-        respuestasEmpleados.append(re)
+        re = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(empleado_id = ids[i]) # 60 respuestas de 1 empleado
+        for resu in re:
+            if resu.Categoria == "Amabilidad":
+                amabilidad += int(resu.Factor) * int(resu.Respuesta)
+            if resu.Categoria == "Gregarismo":
+                gregarismo += int(resu.Factor) * int(resu.Respuesta)
+            if resu.Categoria == "Asertividad":
+                asertividad += int(resu.Factor) * int(resu.Respuesta)
+            if resu.Categoria == "Nivel de Actividad":
+                actividad += int(resu.Factor) * int(resu.Respuesta)
+            if resu.Categoria == "Búsqueda de emociones":
+                emociones += int(resu.Factor) * int(resu.Respuesta)
+            if resu.Categoria == "Alegría":
+                alegria += int(resu.Factor) * int(resu.Respuesta)
+        respuestasEmpleados.append(amabilidad)
+        respuestasEmpleados.append(gregarismo)
+        respuestasEmpleados.append(asertividad) 
+        respuestasEmpleados.append(actividad)
+        respuestasEmpleados.append(emociones)
+        respuestasEmpleados.append(alegria)
+        x.append(respuestasEmpleados)
+        amabilidad = 0
+        gregarismo = 0
+        asertividad = 0
+        actividad = 0
+        emociones = 0
+        alegria = 0
+        respuestasEmpleados = []
+        if empleados[i].Estado == "Activo":
+            y.append(1)
+        else:
+            y.append(0)
+    
 
-
-    for i in range(0, len(respAmabilidad)):
-        r = respAmabilidad[i]
-        amabilidad += int(r.Factor) * int(r.Respuesta)
-        r = respGregarismo[i]
-        gregarismo += int(r.Factor) * int(r.Respuesta)
-        r = respAsertividad[i]
-        asertividad += int(r.Factor) * int(r.Respuesta)
-        r = respActividad[i]
-        actividad += int(r.Factor) * int(r.Respuesta)
-        r = respEmociones[i]
-        emociones += int(r.Factor) * int(r.Respuesta)
-        r = respAlegria[i]
-        alegria += int(r.Factor) * int(r.Respuesta)
-    #TODO: Cambiar estado proceso
-    return render(request, "Proceso/entrenared.html", {"amabilidad": amabilidad, "gregarismo": gregarismo, "asertividad": asertividad, "actividad": actividad, "emociones": emociones, "alegria": alegria, "empleados": empleados, "respuestasEmpleados": len(respuestasEmpleados)})
+    return render(request, "Proceso/entrenared.html",{'idE': idE, 'respuestasEmpleados': x, "y":y})
 #endregion
 
 #region Reclutador
