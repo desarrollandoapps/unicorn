@@ -10,6 +10,11 @@ from django.contrib import auth
 from django.db.models import Count
 import random 
 import string
+import pandas as pd
+from keras.models import Sequential
+from keras.layers import Dense
+import numpy
+from tensorflow import keras
 
 #region index
 
@@ -236,8 +241,17 @@ def entrenarred(request, id):
             y.append(1)
         else:
             y.append(0)
-    
-
+    # Crear dataset
+    #ds = pd.DataFrame(y, columns = ['Amabilidad', 'Gregarismo', 'Asertividad', 'Nivel de actividad', 'Búsqueda de emociones', 'Alegría'])
+    # crea el modelo
+    model = Sequential()
+    model.add(Dense(12, input_dim=6, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+    # Compila el modelo
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    # Ajusta el modelo
+    model.fit(x, y, epochs=150, batch_size=1)
+    model.save('Unicorn/Public/models/modelo-reclutamiento.h5')
     return render(request, "Proceso/entrenared.html",{'idE': idE, 'respuestasEmpleados': x, "y":y})
 #endregion
 
@@ -346,4 +360,5 @@ def registrarrespuestaempleado(request):
 
 def finalempleado(request):
     return render(request, "final-cuestionario-empleado.html")
+
 #endregion
