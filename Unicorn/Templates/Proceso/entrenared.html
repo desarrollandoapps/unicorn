@@ -1,14 +1,35 @@
 {% load static %}
 {% include "header.html" %}
+<div class="py-3 bg-procesos shadow">
+    <div class="container">
+        <div class="row">
+            <div class="col font-weight-bold azul">
+                <img src='{% static "assets/images/img-proceso.png" %}'><br>
+                Seguir mis procesos
+            </div>
+            <div class="col d-flex justify-content-end">
+                <a href="/listadoprocesos" class="text-decoration-none"><i class="fas fa-arrow-left"></i>&nbsp; Volver</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container mt-3">
-    {{ idE }} <br>
-    {{ respuestas }}
-    <hr>
-    {{ respuestasEmpleados }}
-    <hr>
-    {{ y }}
-    <h1>Entrenando...</h1>
+    <h1 class="text-center azul">Proceso iniciado</h1>
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card p-3 shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Estado del proceso: <span class="fw-light">{{ proceso.Estado }}</span></h5>
+                    <p class="card-text">Empresa: <span class="fw-light">{{ proceso.departamento.empresa.Nombre }}</span></p>
+                    <p class="card-text">Departamento: <span class="fw-light">{{ proceso.departamento.Nombre }}</span></p>
+                    <p class="card-text">Cargo: <span class="fw-light">{{ proceso.Cargo }}</span></p>
+                    <p class="card-text">Código del proceso: <span class="fw-light">{{ proceso.Codigo }}</span></p>
+                    <p class="card-text">Ahora puede llamar a sus candidatos para que ingresen a la plataforma para analizar su compatiblidad con la organización.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% include "footer.html" %}

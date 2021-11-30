@@ -47,7 +47,7 @@ def logout(request):
     return redirect('/index.html')
 #endregion
 
-#region empresa
+#region Empresa
 
 def registrarempresa(request):
     if request.method=="POST":
@@ -85,7 +85,7 @@ def editarempresa(request, id):
 
 #endregion
 
-#region departamento
+#region Departamento
 
 def registrardepartamento(request, id):
     empresa = Empresa.objects.get(id = id)
@@ -139,7 +139,7 @@ def editardepartamento(request, id):
 
 #endregion
 
-#region proceso
+#region Proceso
 
 def registrarproceso(request,id):
     iddepartamento = str(id)
@@ -177,16 +177,20 @@ def random_id(lenght=6):
 def detalleproceso(request, id):
     proceso = Proceso.objects.get(id = id)
     departamento = proceso.departamento_id
-    # respuestas del departamento
-    respuestas = Respuesta_ADN.objects.filter(departamento_id = departamento)
-    # Obtener los empleados por las repuestas
-    idE = Respuesta_ADN.objects.distinct().values('empleado_id').filter(departamento_id = departamento)
-    todasrespuestas = Respuesta_ADN.objects.filter(departamento_id = departamento)
-    ids = []
-    for id1 in idE:
-        ids.append(id1['empleado_id'])
-    numResp = len(ids)
-    return render(request, "Proceso/detalleproceso.html", {"proceso": proceso, "numResp": numResp})
+    if proceso.Estado == "En preparación":
+        # respuestas del departamento
+        respuestas = Respuesta_ADN.objects.filter(departamento_id = departamento)
+        # Obtener los empleados por las repuestas
+        idE = Respuesta_ADN.objects.distinct().values('empleado_id').filter(departamento_id = departamento)
+        todasrespuestas = Respuesta_ADN.objects.filter(departamento_id = departamento)
+        ids = []
+        for id1 in idE:
+            ids.append(id1['empleado_id'])
+        numResp = len(ids)
+        return render(request, "Proceso/detalleproceso.html", {"proceso": proceso, "numResp": numResp})
+    #elif proceso.Estado == "Iniciado":
+        # Respuestas de candidatos
+        #return render(request, "Proceso/detalleproceso.html", {"proceso": proceso, "numResp": numResp})
 
 def entrenarred(request, id):
     proceso = Proceso.objects.get(id = id)
@@ -253,10 +257,18 @@ def entrenarred(request, id):
     # Compila el modelo
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     # Ajusta el modelo
-    model.fit(x, y, epochs=150, batch_size=1)
+    #model.fit(x, y, epochs=150, batch_size=1)
     # Guarda el modelo
-    model.save('Unicorn/Public/models/modelo' + departamento + '.h5')
-    return render(request, "Proceso/entrenared.html",{'idE': idE, 'respuestasEmpleados': x, "y":y})
+    #model.save('Unicorn/Public/models/modelo' + str(departamento) + '.h5')
+    # Cambiar el estado del proceso
+    cambiarEstadoProceso(id, "Iniciado")
+    proceso = Proceso.objects.get(id = id)
+    return render(request, "Proceso/entrenared.html",{'idE': idE, 'respuestasEmpleados': x, "y":y, "proceso": proceso})
+
+def cambiarEstadoProceso(idProceso, estado):
+    actualizar = connection.cursor()
+    strId = str(idProceso)
+    actualizar.execute("call cambiarEstadoProceso('" + strId + "', '"+ estado +"')")
 #endregion
 
 #region Reclutador
@@ -365,4 +377,22 @@ def registrarrespuestaempleado(request):
 def finalempleado(request):
     return render(request, "final-cuestionario-empleado.html")
 
+#endregion
+
+#region Candidato
+def registrarCandidato(request):
+    if request.method=="POST":
+        if request.POST.get('nombre') and request.POST.get('cargo') and request.POST.get('email') and request.POST.get('contrasena'):
+            reclutador = Reclutador()
+            reclutador.Nombre = request.POST.get('nombre')
+            reclutador.Cargo = request.POST.get('cargo')
+            reclutador.Email = request.POST.get('email')
+            insertar = connection.cursor()
+            insertar.execute("call registrarreclutador('"+reclutador.Nombre+"','"+reclutador.Cargo+"','"+reclutador.Email+"')")
+            user = User.objects.create_user(request.POST.get('email'), request.POST.get('email'), request.POST.get('contrasena'))
+            user.first_name = request.POST.get('nombre')
+            user.save()
+            return redirect("indexreclutador")
+    else:
+        return render(request,'registro-candidato.html')
 #endregion
