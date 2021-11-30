@@ -176,21 +176,26 @@ def random_id(lenght=6):
 
 def detalleproceso(request, id):
     proceso = Proceso.objects.get(id = id)
-    respuestas = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id)
-    numResp = Respuesta_ADN.objects.all().distinct().values('empleado_id')
-    numResp = len(numResp)
-    return render(request, "Proceso/detalleproceso.html", {"proceso": proceso, "respuestas": respuestas, "numResp": numResp})
+    departamento = proceso.departamento_id
+    # respuestas del departamento
+    respuestas = Respuesta_ADN.objects.filter(departamento_id = departamento)
+    # Obtener los empleados por las repuestas
+    idE = Respuesta_ADN.objects.distinct().values('empleado_id').filter(departamento_id = departamento)
+    todasrespuestas = Respuesta_ADN.objects.filter(departamento_id = departamento)
+    ids = []
+    for id1 in idE:
+        ids.append(id1['empleado_id'])
+    numResp = len(ids)
+    return render(request, "Proceso/detalleproceso.html", {"proceso": proceso, "numResp": numResp})
 
 def entrenarred(request, id):
     proceso = Proceso.objects.get(id = id)
+    departamento = proceso.departamento_id
     # respuestas del departamento
-    respuestas = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id)
-    # respuestas de diferentes empleados
-    
-
+    respuestas = Respuesta_ADN.objects.filter(departamento_id = departamento)
     # Obtener los empleados por las repuestas
-    idE = Respuesta_ADN.objects.distinct().values('empleado_id').filter(departamento_id = proceso.departamento_id)
-    todasrespuestas = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id)
+    idE = Respuesta_ADN.objects.distinct().values('empleado_id').filter(departamento_id = departamento)
+    todasrespuestas = Respuesta_ADN.objects.filter(departamento_id = departamento)
     ids = []
     empleados = []
 
@@ -209,7 +214,7 @@ def entrenarred(request, id):
     y = []
     # Promediar las respuestas por categoría por empleado
     for i in range(0, len(ids)):
-        re = Respuesta_ADN.objects.filter(departamento_id = proceso.departamento_id).filter(empleado_id = ids[i]) # 60 respuestas de 1 empleado
+        re = Respuesta_ADN.objects.filter(departamento_id = departamento).filter(empleado_id = ids[i]) # 60 respuestas de 1 empleado
         for resu in re:
             if resu.Categoria == "Amabilidad":
                 amabilidad += int(resu.Factor) * int(resu.Respuesta)
@@ -241,9 +246,7 @@ def entrenarred(request, id):
             y.append(1)
         else:
             y.append(0)
-    # Crear dataset
-    #ds = pd.DataFrame(y, columns = ['Amabilidad', 'Gregarismo', 'Asertividad', 'Nivel de actividad', 'Búsqueda de emociones', 'Alegría'])
-    # crea el modelo
+    # Crea el modelo
     model = Sequential()
     model.add(Dense(12, input_dim=6, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
@@ -251,7 +254,8 @@ def entrenarred(request, id):
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     # Ajusta el modelo
     model.fit(x, y, epochs=150, batch_size=1)
-    model.save('Unicorn/Public/models/modelo-reclutamiento.h5')
+    # Guarda el modelo
+    model.save('Unicorn/Public/models/modelo' + departamento + '.h5')
     return render(request, "Proceso/entrenared.html",{'idE': idE, 'respuestasEmpleados': x, "y":y})
 #endregion
 
