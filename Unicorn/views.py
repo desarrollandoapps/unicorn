@@ -19,7 +19,11 @@ import string
 #region index
 
 def index(request):
-    return render(request,"index.html")
+    try:
+        candidato = Candidato.objects.get(Email = request.user.email)
+        return render(request,"index.html", {'candidato': candidato})
+    except:
+        return render(request,"index.html")
 
 #endregion
 
@@ -47,10 +51,9 @@ def logincandidato(request):
         user = auth.authenticate(username = request.POST.get('email'), password = request.POST.get('contrasena'))
         if user is not None:
             auth.login(request, user)
-            reclutador = Reclutador.objects.get(Email = request.user.email) 
-            if reclutador is not None:
-                # return redirect("Reclutador/index-reclutador.html")
-                return redirect('/indexreclutador')
+            candidato = Candidato.objects.get(Email = request.user.email)
+            if candidato is not None:
+                return redirect('/ingresocandidato2/'+ str(candidato.id))
             else:
                 return redirect('/')
         else:
@@ -58,7 +61,7 @@ def logincandidato(request):
             return render(request, "Login/logincandidato.html", {'mensaje': mensaje})
     else:
         return render(request,"Login/logincandidato.html")
-    
+
 def logout(request):
     auth.logout(request)
     return redirect('/')
@@ -390,7 +393,7 @@ def registrarrespuestaempleado(request):
                 guardar.execute("call registrarrespuestasempleado('" + preguntas[i] + "', '" + categorias[i] + "', '"+ factores[i] + "', '" + respuestas[i] + "', '" + depto + "', '" + empleado + "')")
             return redirect("/finalempleado")
     else:
-        return redirect('home')
+        return redirect('/home')
 
 def finalempleado(request):
     return render(request, "final-cuestionario-empleado.html")
@@ -402,26 +405,39 @@ def finalempleado(request):
 def ingresoCandidato(request):
     
     if request.user.is_authenticated:
-        #LLevar a ingreso de proceso
-        return redirect('/admin')
+        candidato = Candidato.objects.get(Email = request.user.email)
+        return redirect('/ingresocandidato2/' + str(candidato.id))
     else:
         #LLevar a registro de candidato
         return redirect('/logincandidato')
 
+def ingresocandidato2(request, id):
+    if request.method=="POST":
+        if request.POST.get('codigo'):
+            candidato = Candidato.objects.get(id = id)
+            try:
+                proceso = Proceso.objects.get(Codigo = request.POST.get('codigo'))
+                return render(request,"Respuesta/respuesta-candidato.html", {"candidato": candidato, "proceso": proceso})
+            except:
+                return render(request,"Candidato/ingreso2.html", {"info": "El código no coincide. Intente de nuevo."})
+    else:
+        return render(request,"Candidato/ingreso2.html")
+    
 def registrarCandidato(request):
     if request.method=="POST":
-        if request.POST.get('nombre') and request.POST.get('edad') and request.POST.get('estadocivil') and request.POST.get('genero') and request.POST.get('escolaridad') and request.POST.get('residencia') and request.POST.get('personashogar') and request.POST.get('hijos') and request.POST.get('mascotas') and request.POST.get('talla') and request.POST.get('peso') and request.POST.get('email') and request.POST.get('celular') and request.POST.get('contrasena'):
+        if request.POST.get('nombre') and request.POST.get('edad') and request.POST.get('estadocivil') and request.POST.get('genero') and request.POST.get('escolaridad') and request.POST.get('residencia') and request.POST.get('personashogar') and request.POST.get('hijos') and request.POST.get('mascotas') and request.POST.get('talla') and request.POST.get('peso') and request.POST.get('email') and request.POST.get('celular') and request.POST.get('contrasena') and request.POST.get('estrato'):
             candidato = Candidato()
             candidato.Nombre = request.POST.get('nombre')
             candidato.Edad = request.POST.get('edad')
             candidato.EstadoCivil = request.POST.get('estadocivil')
+            candidato.Estrato = request.POST.get('estrato')
             candidato.Genero = request.POST.get('genero')
             candidato.NivelEscolar = request.POST.get('escolaridad')
             candidato.Residencia = request.POST.get('residencia')
             candidato.PersonasHogar = request.POST.get('personashogar')
             candidato.Hijos = request.POST.get('hijos')
             candidato.Mascotas = request.POST.get('mascotas')
-            imc = int(request.POST.get('peso')) / (int(request.POST.get('talla')) * int(request.POST.get('talla')))
+            imc = int(request.POST.get('peso')) / ((int(request.POST.get('talla')) * int(request.POST.get('talla')))/10000)
             candidato.Imc = imc
             candidato.Email = request.POST.get('email')
             candidato.Celular = request.POST.get('celular')
@@ -430,7 +446,25 @@ def registrarCandidato(request):
             user = User.objects.create_user(request.POST.get('email'), request.POST.get('email'), request.POST.get('contrasena'))
             user.first_name = request.POST.get('nombre')
             user.save()
-            return redirect("/indexreclutador")
+            return redirect("/logincandidato")
     else:
         return render(request,'registro-candidato.html')
+
+def registrarrespuestacandidato(request):
+    if request.method=="POST":
+        if request.POST.get('pregunta[]') and request.POST.get('categoria[]') and request.POST.get('factor[]') and request.POST.get('respuesta[]'):
+            respuesta = Respuesta()
+            preguntas = request.POST.getlist('pregunta[]')
+            categorias = request.POST.getlist('categoria[]')
+            factores = request.POST.getlist('factor[]')
+            respuestas = request.POST.getlist('respuesta[]')
+            depto = str(request.POST.get('depto'))
+            empleado = str(request.POST.get('empleado'))
+            for i in range(0, 60):
+                guardar = connection.cursor()
+                #### OJO ######
+                guardar.execute("call registrarrespuestascandidato('" + preguntas[i] + "', '" + categorias[i] + "', '"+ factores[i] + "', '" + respuestas[i] + "', '" + depto + "', '" + empleado + "')")
+            return redirect("/finalempleado")
+    else:
+        return redirect('/home')
 #endregion

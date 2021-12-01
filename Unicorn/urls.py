@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from Unicorn.views import borrardepartamento, borrarempleado, borrarempresa, detalleproceso, editardepartamento, editarempleado, entrenarred, index, ingresoempleado, ingresoempleado2, listadoempleados, logout, registrarCandidato, registrarempleado, registrarreclutador,registrarempresa,registrardepartamento,registrarproceso,indexreclutador,listadoempresa,listadodepartamento,ingresarlogin,editarempresa,listadoprocesos, registrarrespuestaempleado, finalempleado, ingresoCandidato, logincandidato
+from Unicorn.views import borrardepartamento, borrarempleado, borrarempresa, detalleproceso, editardepartamento, editarempleado, entrenarred, index, ingresoempleado, ingresoempleado2, listadoempleados, logout, registrarCandidato, registrarempleado, registrarreclutador,registrarempresa,registrardepartamento,registrarproceso,indexreclutador,listadoempresa,listadodepartamento,ingresarlogin,editarempresa,listadoprocesos, registrarrespuestaempleado, finalempleado, ingresoCandidato, logincandidato, registrarrespuestacandidato, ingresocandidato2
 
 urlpatterns = [
     path('',index),
@@ -47,5 +47,7 @@ urlpatterns = [
     path('entrenarred/<int:id>', entrenarred),
     path('ingresocandidato', ingresoCandidato),
     path('logincandidato', logincandidato),
-    path('registrocandidato',registrarCandidato)
+    path('ingresocandidato2/<int:id>', ingresocandidato2),
+    path('registrocandidato',registrarCandidato),
+    path('registrarrespuestacandidato', registrarrespuestacandidato)
 ]

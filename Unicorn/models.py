@@ -48,6 +48,7 @@ class Proceso(models.Model):
     departamento=models.ForeignKey(Departamento,on_delete=models.PROTECT)
     class Meta:
         db_table = "proceso"
+
 class Candidato(models.Model):
     Nombre=models.CharField(max_length=255)
     Edad=models.CharField(max_length=255)

@@ -21,7 +21,7 @@
             <div class="col-md-6 d-flex align-items-center">
                 <form action="" method="POST" class="row g-3 needs-validation" novalidate>
                     {% csrf_token %}
-                    <h1 class="text-white text-center">Registre sus datos</h1>
+                    <h1 class="text-white text-center">Registre sus datos como candidato</h1>
                     <div class="col-md-8 position-relative">
                         <label class="text-white">Nombre</label>
                         <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required>
@@ -122,14 +122,28 @@
                             Por favor ingrese la cantidad de personas con las que vive.
                         </div>
                     </div>
-                    <div class="col-md-6 position-relative">
+                    <div class="col-md-4 position-relative">
+                        <label class="text-white">Estrato</label>
+                        <select class="form-select" name="estrato" required>
+                            <option disable value="">Seleccione...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <div class="invalid-tooltip">
+                            Por favor ingrese su estrato socioeconómico.
+                        </div>
+                    </div>
+                    <div class="col-md-4 position-relative">
                         <label class="text-white">Número de hijos</label>
                         <input type="number" name="hijos" id="hijos" class="form-control" value="0" required>
                         <div class="invalid-tooltip">
                             Por favor ingrese su número de hijos.
                         </div>
                     </div>
-                    <div class="col-md-6 position-relative">
+                    <div class="col-md-4 position-relative">
                         <label class="text-white">Número de mascotas</label>
                         <input type="number" name="mascotas" id="mascotas" class="form-control" value="0"
                             required>

@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/jpg" href='{% static "assets/images/favicon.ico" %}'/>
+    <link rel="stylesheet" href='{% static "assets/css/bootstrap.min.css" %}'>
+    <link rel="stylesheet" href='{% static "css/fontawesome/css/all.min.css" %}'>
+    <link rel="stylesheet" href='{% static "assets/css/unicorn.css" %}'>
+    <title>Unicorn</title>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/home">
+                <img src='{% static "assets/images/logo.svg" %}' alt="Logo" width="140">
+            </a>
+        </div>
+    </nav>
+    <!-- FIN NAVBAR -->
+    <div class="d-flex justify-content-center header">
+        <img src='{% static "assets/images/ingreso-empleado.svg" %}' alt="" class="py-5">
+    </div>
+    <main class="container d-flex justify-content-center">
+        <div class="py-5 form-codigo">
+            {% if info %}
+            <div class="alert alert-danger my-3 text-center">{{ info }}</div>
+            {% endif %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input type="text" name="codigo" id="codigo" class="form-control mb-5" placeholder="Ingresa el código del proceso">
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-principal">ENTRAR</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
