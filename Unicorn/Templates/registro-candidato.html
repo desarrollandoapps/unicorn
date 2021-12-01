@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,34 +11,232 @@
     <link rel="stylesheet" href='{% static "assets/css/unicorn.css" %}'>
     <title>Unicorn</title>
 </head>
-    <body class="fondo-azul">
-        <div class="container alto-full">
-            <div class="row alto-full">
-                <div class="col-md-6 d-flex justify-content-center align-items-center">
-                    <img src='{% static "assets/images/login.svg" %}' class="w-50">
-                </div>
-                <div class="col-md-6 d-flex align-items-center">
-                    <form action="" method="POST" class="w-100">
-                        {% csrf_token %}
-                        <div class="d-grid gap-2">
-                            <h1 class="text-white text-center">Registre sus datos</h1>
-                            <input type="text" name="nombre" id="nombre" class="form-control mb-4" placeholder="Nombre" required>
-                            <input type="text" name="cargo" id="cargo" class="form-control mb-4" placeholder="Cargo" required>
-                            <input type="email" name="email" id="email" class="form-control mb-4" placeholder="Email" required>
-                            <input type="password" name="contrasena" id="contrasena" class="form-control mb-5" placeholder="Contraseña" required>
 
+<body class="fondo-azul">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                <img src='{% static "assets/images/login.svg" %}' class="w-50">
+            </div>
+            <div class="col-md-6 d-flex align-items-center">
+                <form action="" method="POST" class="row g-3 needs-validation" novalidate>
+                    {% csrf_token %}
+                    <h1 class="text-white text-center">Registre sus datos</h1>
+                    <div class="col-md-8 position-relative">
+                        <label class="text-white">Nombre</label>
+                        <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required>
+                        <div class="invalid-tooltip">
+                            Por favor ingrese su nombre.
                         </div>
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-principal">REGISTRESE</button>
+                    </div>
+                    <div class="col-md-4 position-relative">
+                        <label class="text-white">Edad</label>
+                        <select class="form-select" aria-label="Edad" name="edad" required>
+                            <option selected disable value="">Seleccione...</option>
+                            <option value="1">18 a 25 años</option>
+                            <option value="2">26 a 35 años</option>
+                            <option value="3">36 a 45 años</option>
+                            <option value="4">46 a 55 años</option>
+                            <option value="5">56 o más años</option>
+                        </select>
+                        <div class="invalid-tooltip">
+                            Por favor ingrese su rango de edad.
                         </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="col-md-4 position-relative">
+                        <label class="text-white">Estado civil</label>
+                        <select class="form-select" name="estadocivil" required>
+                            <option selected disable value="">Seleccione...</option>
+                            <option value="1">Soltero(a)</option>
+                            <option value="2">Casado(a)</option>
+                            <option value="3">Unión libre</option>
+                            <option value="4">Separado(a)</option>
+                            <option value="5">Viudo(a)</option>
+                        </select>
+                        <div class="invalid-tooltip">
+                            Por favor seleccione su estado civil.
+                        </div>
+                    </div>
+                    <div class="col-md-4 position-relative">
+                        <label class="text-white">Género</label>
+                        <select class="form-select" name="genero" required>
+                            <option selected disable value="">Seleccione...</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        <div class="invalid-tooltip">
+                            Por favor seleccione su género.
+                        </div>
+                    </div>
+                    <div class="col-md-4 position-relative">
+                        <label class="text-white">Nivel educativo</label>
+                        <select class="form-select" name="escolaridad" required>
+                            <option selected disable value="">Seleccione...</option>
+                            <option value="1">Primaria</option>
+                            <option value="2">Bachillerato</option>
+                            <option value="3">Técnico</option>
+                            <option value="4">Tecnólogo</option>
+                            <option value="5">Profesional</option>
+                            <option value="6">Especialista</option>
+                            <option value="7">Maestría</option>
+                            <option value="8">Doctorado</option>
+                            <option value="9">Posdoctorado</option>
+                        </select>
+                        <div class="invalid-tooltip">
+                            Por favor seleccione su máximo nivel educativo.
+                        </div>
+                    </div>
+                    <div class="col-md-4 position-relative">
+                        <label class="text-white">Lugar de residencia</label>
+                        <select class="form-select" aria-label="Lugar residencia" name="residencia" required>
+                            <option selected disable value="">Seleccione...</option>
+                            <option value="1">Comuna 1 - Centro</option>
+                            <option value="2">Comuna 2 - Calambeo</option>
+                            <option value="3">Comuna 3 - San Simón</option>
+                            <option value="4">Comuna 4 - Piedrapintada</option>
+                            <option value="5">Comuna 5 - Jordán</option>
+                            <option value="6">Comuna 6 - Vergel</option>
+                            <option value="6">Comuna 7 - Salado</option>
+                            <option value="7">Comuna 8 - Simón Bolivar</option>
+                            <option value="8">Comuna 9 - Picaleña - Mirolindo</option>
+                            <option value="10">Comuna 10 - Estadio</option>
+                            <option value="11">Comuna 11 - Ferias</option>
+                            <option value="12">Comuna 12 - Riacurte</option>
+                            <option value="13">Comuna 13 - Boquerón</option>
+                        </select>
+                        <div class="invalid-tooltip">
+                            Por favor seleccione su lugar de residencia.
+                        </div>
+                    </div>
+                    <div class="col-md-8 position-relative">
+                        <label class="text-white">¿Con cuántas personas vive?</label>
+                        <select class="form-select" name="personashogar" required>
+                            <option disable value="">Seleccione...</option>
+                            <option value="1">0</option>
+                            <option value="2">1 - 2</option>
+                            <option value="3">3 - 4</option>
+                            <option value="4">5 o más</option>
+                        </select>
+                        <div class="invalid-tooltip">
+                            Por favor ingrese la cantidad de personas con las que vive.
+                        </div>
+                    </div>
+                    <div class="col-md-6 position-relative">
+                        <label class="text-white">Número de hijos</label>
+                        <input type="number" name="hijos" id="hijos" class="form-control" value="0" required>
+                        <div class="invalid-tooltip">
+                            Por favor ingrese su número de hijos.
+                        </div>
+                    </div>
+                    <div class="col-md-6 position-relative">
+                        <label class="text-white">Número de mascotas</label>
+                        <input type="number" name="mascotas" id="mascotas" class="form-control" value="0"
+                            required>
+                        <div class="invalid-tooltip">
+                            Por favor ingrese su número de mascotas.
+                        </div>
+                    </div>
+                    <div class="col-md-6 position-relative">
+                        <label class="text-white">Talla (en cm)</label>
+                        <input type="number" name="talla" id="talla" class="form-control" placeholder="170" required>
+                        <div class="invalid-tooltip">
+                            Por favor ingrese su talla.
+                        </div>
+                    </div>
+                    <div class="col-md-6 position-relative">
+                        <label class="text-white">Peso (en Kg)</label>
+                        <input type="number" name="peso" id="peso" class="form-control" placeholder="80" required>
+                        <div class="invalid-tooltip">
+                            Por favor ingrese su peso.
+                        </div>
+                    </div>
+                    <div class="col-md-6 position-relative position-relative">
+                        <label class="text-white">Correo electrónico</label>
+                        <input type="email" name="email" id="email" class="form-control" placeholder="Email" required>
+                        <div class="invalid-tooltip">
+                            Por favor ingrese su correo electrónico.
+                        </div>
+                    </div>
+                    <div class="col-md-6 position-relative">
+                        <label class="text-white">Celular</label>
+                        <input type="tel" name="celular" id="celular" class="form-control" placeholder="Celular"
+                            required>
+                        <div class="invalid-tooltip">
+                            Por favor ingrese su número de teléfono celular.
+                        </div>
+                    </div>
+                    <div id="msg"></div>
+                    <!-- Mensajes de Verificación -->
+                    <div id="error" class="alert alert-danger alert-dismissible fade show ocultar" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                        Las Contraseñas no coinciden, vuelve a intentar!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div id="ok" class="alert alert-success alert-dismissible fade show ocultar" role="alert">
+                        Las Contraseñas coinciden!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <!-- Fin Mensajes de Verificación -->
+                    <div class="col-md-12">
+                        <label class="text-white">Contraseña</label>
+                        <input type="password" name="contrasena" id="contrasena" class="form-control" placeholder="Contraseña" required>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="text-white">Vuelve a ingresar tu contraseña</label>
+                        <input type="password" name="contrasena2" id="contrasena2" class="form-control" onchange="verificarPasswords()" required>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-principal">REGISTRESE</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <!-- FIN NAVBAR -->
+    <script src='{% static "assets/js/bootstrap.bundle.min.js" %}'></script>
+    <script>
+        function verificarPasswords() {
+            pass1 = document.getElementById('contrasena');
+            pass2 = document.getElementById('contrasena2');
+            if (pass1.value == "" || pass1.value != pass2.value) {
+                document.getElementById("error").classList.add("mostrar");
+                return false;
+            }
+            else {
+                document.getElementById("error").classList.remove("mostrar");
+                document.getElementById("ok").classList.remove("ocultar");
+                document.getElementById("login").disabled = true;
+                setTimeout(function () {
+                    location.reload();
+                }, 3000);
 
-        <script src='{% static "assets/js/bootstrap.bundle.min.js" %}'></script>
-    </body>
+                return true;
+            }
+        }
+    </script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</body>
 
 </html>

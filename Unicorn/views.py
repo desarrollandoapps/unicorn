@@ -4,17 +4,17 @@ from django.shortcuts import render,redirect, resolve_url
 from django.http import HttpResponse
 from django.template import Template
 from django.template.context import Context
-from Unicorn.models import Reclutador,Empresa,Departamento,Proceso, Empleado, Respuesta, Respuesta_ADN
+from Unicorn.models import Reclutador,Empresa,Departamento,Proceso, Empleado, Respuesta, Respuesta_ADN, Candidato
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.db.models import Count
 import random 
 import string
-import pandas as pd
-from keras.models import Sequential
-from keras.layers import Dense
-import numpy
-from tensorflow import keras
+# import pandas as pd
+# from keras.models import Sequential
+# from keras.layers import Dense
+# import numpy
+# from tensorflow import keras
 
 #region index
 
@@ -41,10 +41,27 @@ def ingresarlogin(request):
             return render(request, "Login/login.html", {'mensaje': mensaje})
     else:
         return render(request,"Login/login.html")
+
+def logincandidato(request):
+    if request.method=="POST":
+        user = auth.authenticate(username = request.POST.get('email'), password = request.POST.get('contrasena'))
+        if user is not None:
+            auth.login(request, user)
+            reclutador = Reclutador.objects.get(Email = request.user.email) 
+            if reclutador is not None:
+                # return redirect("Reclutador/index-reclutador.html")
+                return redirect('/indexreclutador')
+            else:
+                return redirect('/')
+        else:
+            mensaje = "Usuario o contraseña incorrectos"
+            return render(request, "Login/logincandidato.html", {'mensaje': mensaje})
+    else:
+        return render(request,"Login/logincandidato.html")
     
 def logout(request):
-    auth.logout()
-    return redirect('/index.html')
+    auth.logout(request)
+    return redirect('/')
 #endregion
 
 #region Empresa
@@ -193,77 +210,78 @@ def detalleproceso(request, id):
         #return render(request, "Proceso/detalleproceso.html", {"proceso": proceso, "numResp": numResp})
 
 def entrenarred(request, id):
-    proceso = Proceso.objects.get(id = id)
-    departamento = proceso.departamento_id
-    # respuestas del departamento
-    respuestas = Respuesta_ADN.objects.filter(departamento_id = departamento)
-    # Obtener los empleados por las repuestas
-    idE = Respuesta_ADN.objects.distinct().values('empleado_id').filter(departamento_id = departamento)
-    todasrespuestas = Respuesta_ADN.objects.filter(departamento_id = departamento)
-    ids = []
-    empleados = []
+    return True
+#     proceso = Proceso.objects.get(id = id)
+#     departamento = proceso.departamento_id
+#     # respuestas del departamento
+#     respuestas = Respuesta_ADN.objects.filter(departamento_id = departamento)
+#     # Obtener los empleados por las repuestas
+#     idE = Respuesta_ADN.objects.distinct().values('empleado_id').filter(departamento_id = departamento)
+#     todasrespuestas = Respuesta_ADN.objects.filter(departamento_id = departamento)
+#     ids = []
+#     empleados = []
 
-    for id1 in idE:
-        ids.append(id1['empleado_id'])
-    for id2 in ids:
-        empleados.append(Empleado.objects.get(id = id2))
-    amabilidad = 0
-    gregarismo = 0
-    asertividad = 0
-    actividad = 0
-    emociones = 0
-    alegria = 0
-    respuestasEmpleados = []
-    x = []
-    y = []
-    # Promediar las respuestas por categoría por empleado
-    for i in range(0, len(ids)):
-        re = Respuesta_ADN.objects.filter(departamento_id = departamento).filter(empleado_id = ids[i]) # 60 respuestas de 1 empleado
-        for resu in re:
-            if resu.Categoria == "Amabilidad":
-                amabilidad += int(resu.Factor) * int(resu.Respuesta)
-            if resu.Categoria == "Gregarismo":
-                gregarismo += int(resu.Factor) * int(resu.Respuesta)
-            if resu.Categoria == "Asertividad":
-                asertividad += int(resu.Factor) * int(resu.Respuesta)
-            if resu.Categoria == "Nivel de Actividad":
-                actividad += int(resu.Factor) * int(resu.Respuesta)
-            if resu.Categoria == "Búsqueda de emociones":
-                emociones += int(resu.Factor) * int(resu.Respuesta)
-            if resu.Categoria == "Alegría":
-                alegria += int(resu.Factor) * int(resu.Respuesta)
-        respuestasEmpleados.append(amabilidad)
-        respuestasEmpleados.append(gregarismo)
-        respuestasEmpleados.append(asertividad) 
-        respuestasEmpleados.append(actividad)
-        respuestasEmpleados.append(emociones)
-        respuestasEmpleados.append(alegria)
-        x.append(respuestasEmpleados)
-        amabilidad = 0
-        gregarismo = 0
-        asertividad = 0
-        actividad = 0
-        emociones = 0
-        alegria = 0
-        respuestasEmpleados = []
-        if empleados[i].Estado == "Activo":
-            y.append(1)
-        else:
-            y.append(0)
-    # Crea el modelo
-    model = Sequential()
-    model.add(Dense(12, input_dim=6, activation='relu'))
-    model.add(Dense(1, activation='sigmoid'))
-    # Compila el modelo
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    # Ajusta el modelo
-    #model.fit(x, y, epochs=150, batch_size=1)
-    # Guarda el modelo
-    #model.save('Unicorn/Public/models/modelo' + str(departamento) + '.h5')
-    # Cambiar el estado del proceso
-    cambiarEstadoProceso(id, "Iniciado")
-    proceso = Proceso.objects.get(id = id)
-    return render(request, "Proceso/entrenared.html",{'idE': idE, 'respuestasEmpleados': x, "y":y, "proceso": proceso})
+#     for id1 in idE:
+#         ids.append(id1['empleado_id'])
+#     for id2 in ids:
+#         empleados.append(Empleado.objects.get(id = id2))
+#     amabilidad = 0
+#     gregarismo = 0
+#     asertividad = 0
+#     actividad = 0
+#     emociones = 0
+#     alegria = 0
+#     respuestasEmpleados = []
+#     x = []
+#     y = []
+#     # Promediar las respuestas por categoría por empleado
+#     for i in range(0, len(ids)):
+#         re = Respuesta_ADN.objects.filter(departamento_id = departamento).filter(empleado_id = ids[i]) # 60 respuestas de 1 empleado
+#         for resu in re:
+#             if resu.Categoria == "Amabilidad":
+#                 amabilidad += int(resu.Factor) * int(resu.Respuesta)
+#             if resu.Categoria == "Gregarismo":
+#                 gregarismo += int(resu.Factor) * int(resu.Respuesta)
+#             if resu.Categoria == "Asertividad":
+#                 asertividad += int(resu.Factor) * int(resu.Respuesta)
+#             if resu.Categoria == "Nivel de Actividad":
+#                 actividad += int(resu.Factor) * int(resu.Respuesta)
+#             if resu.Categoria == "Búsqueda de emociones":
+#                 emociones += int(resu.Factor) * int(resu.Respuesta)
+#             if resu.Categoria == "Alegría":
+#                 alegria += int(resu.Factor) * int(resu.Respuesta)
+#         respuestasEmpleados.append(amabilidad)
+#         respuestasEmpleados.append(gregarismo)
+#         respuestasEmpleados.append(asertividad) 
+#         respuestasEmpleados.append(actividad)
+#         respuestasEmpleados.append(emociones)
+#         respuestasEmpleados.append(alegria)
+#         x.append(respuestasEmpleados)
+#         amabilidad = 0
+#         gregarismo = 0
+#         asertividad = 0
+#         actividad = 0
+#         emociones = 0
+#         alegria = 0
+#         respuestasEmpleados = []
+#         if empleados[i].Estado == "Activo":
+#             y.append(1)
+#         else:
+#             y.append(0)
+#     # Crea el modelo
+#     model = Sequential()
+#     model.add(Dense(12, input_dim=6, activation='relu'))
+#     model.add(Dense(1, activation='sigmoid'))
+#     # Compila el modelo
+#     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+#     # Ajusta el modelo
+#     model.fit(x, y, epochs=150, batch_size=1)
+#     # Guarda el modelo
+#     model.save('Unicorn/Public/models/modelo' + str(departamento) + '.h5')
+#     # Cambiar el estado del proceso
+#     cambiarEstadoProceso(id, "Iniciado")
+#     proceso = Proceso.objects.get(id = id)
+#     return render(request, "Proceso/entrenared.html",{'idE': idE, 'respuestasEmpleados': x, "y":y, "proceso": proceso})
 
 def cambiarEstadoProceso(idProceso, estado):
     actualizar = connection.cursor()
@@ -289,7 +307,7 @@ def registrarreclutador(request):
             user = User.objects.create_user(request.POST.get('email'), request.POST.get('email'), request.POST.get('contrasena'))
             user.first_name = request.POST.get('nombre')
             user.save()
-            return redirect("indexreclutador")
+            return redirect("/indexreclutador")
     else:
         return render(request,'registrese.html')
 
@@ -380,19 +398,39 @@ def finalempleado(request):
 #endregion
 
 #region Candidato
+
+def ingresoCandidato(request):
+    
+    if request.user.is_authenticated:
+        #LLevar a ingreso de proceso
+        return redirect('/admin')
+    else:
+        #LLevar a registro de candidato
+        return redirect('/logincandidato')
+
 def registrarCandidato(request):
     if request.method=="POST":
-        if request.POST.get('nombre') and request.POST.get('cargo') and request.POST.get('email') and request.POST.get('contrasena'):
-            reclutador = Reclutador()
-            reclutador.Nombre = request.POST.get('nombre')
-            reclutador.Cargo = request.POST.get('cargo')
-            reclutador.Email = request.POST.get('email')
-            insertar = connection.cursor()
-            insertar.execute("call registrarreclutador('"+reclutador.Nombre+"','"+reclutador.Cargo+"','"+reclutador.Email+"')")
+        if request.POST.get('nombre') and request.POST.get('edad') and request.POST.get('estadocivil') and request.POST.get('genero') and request.POST.get('escolaridad') and request.POST.get('residencia') and request.POST.get('personashogar') and request.POST.get('hijos') and request.POST.get('mascotas') and request.POST.get('talla') and request.POST.get('peso') and request.POST.get('email') and request.POST.get('celular') and request.POST.get('contrasena'):
+            candidato = Candidato()
+            candidato.Nombre = request.POST.get('nombre')
+            candidato.Edad = request.POST.get('edad')
+            candidato.EstadoCivil = request.POST.get('estadocivil')
+            candidato.Genero = request.POST.get('genero')
+            candidato.NivelEscolar = request.POST.get('escolaridad')
+            candidato.Residencia = request.POST.get('residencia')
+            candidato.PersonasHogar = request.POST.get('personashogar')
+            candidato.Hijos = request.POST.get('hijos')
+            candidato.Mascotas = request.POST.get('mascotas')
+            imc = int(request.POST.get('peso')) / (int(request.POST.get('talla')) * int(request.POST.get('talla')))
+            candidato.Imc = imc
+            candidato.Email = request.POST.get('email')
+            candidato.Celular = request.POST.get('celular')
+            candidato.save()
+            
             user = User.objects.create_user(request.POST.get('email'), request.POST.get('email'), request.POST.get('contrasena'))
             user.first_name = request.POST.get('nombre')
             user.save()
-            return redirect("indexreclutador")
+            return redirect("/indexreclutador")
     else:
         return render(request,'registro-candidato.html')
 #endregion

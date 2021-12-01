@@ -60,7 +60,6 @@ class Candidato(models.Model):
     Hijos=models.CharField(max_length=255)
     Mascotas=models.CharField(max_length=255)
     Imc=models.CharField(max_length=255)
-    GastoTransporte=models.CharField(max_length=255)
     Email=models.CharField(max_length=255)
     Celular=models.CharField(max_length=255)
     class Meta:

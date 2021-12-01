@@ -104,10 +104,14 @@ p {
     width: 35% !important;
 }
 
-.form-control {
-    border-radius: 31px;
+.form-control, .form-select {
+    border-radius: 31px !important;
     text-align: center;
     font-size: small;
+}
+
+.invalid-feedback {
+    color: black !important;
 }
 
 @media (max-width: 576px) { 
@@ -146,4 +150,13 @@ p {
   color: #FFF !important;
   background-color: #859EFF !important;
   border-color: #859EFF !important;
+}
+/* *************** */
+
+.ocultar {
+    display: none;
+}
+ 
+.mostrar {
+    display: block;
 }
